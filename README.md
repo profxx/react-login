@@ -8,7 +8,7 @@ Este projeto é o **frontend** de um sistema de autenticação, feito com **Reac
 
 - React (com Vite)
 - Axios
-- JavaScript (ou TypeScript, se preferir)
+- JavaScript
 - localStorage para armazenar o token JWT
 
 ---
