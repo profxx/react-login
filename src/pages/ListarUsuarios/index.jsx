@@ -14,6 +14,8 @@ function ListarUsuarios() {
     }
 
     useEffect(() => {
+        let isMounted = true; // ✅ variável declarada corretamente
+
         async function loadUsers() {
             try {
                 const token = localStorage.getItem('token');
@@ -24,12 +26,14 @@ function ListarUsuarios() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setAllUsers(users);
-                console.log('Usuários carregados:', users);
+
+                if (isMounted) {
+                    setAllUsers(users);
+                    console.log('Usuários carregados:', users);
+                }
             } catch (err) {
                 console.error('Erro ao carregar usuários:', err.response?.data || err.message);
 
-                // Se o status for 401 ou 403, token inválido/expirado — desloga e redireciona
                 if (err.response && (err.response.status === 401 || err.response.status === 403)) {
                     alert('Sua sessão expirou. Faça login novamente.');
                     localStorage.removeItem('token');
@@ -39,13 +43,15 @@ function ListarUsuarios() {
         }
 
         loadUsers();
-    }, []);
+
+        return () => {
+            isMounted = false; // ✅ limpeza segura
+        };
+    }, [navigate]);
 
     return (
         <div className="listar-usuarios">
-
             <Header text="Lista de Usuários" />
-
             <div className="container-tabela">
                 <table className="user-table">
                     <thead>
